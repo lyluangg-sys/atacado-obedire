@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Atacado Obedire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdfa 0%, #fefce8 100%);
+        }
+        
+        .active-scale:active { transform: scale(0.97); transition: transform 0.1s; }
+        .active-scale-95:active { transform: scale(0.95); transition: transform 0.1s; }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        
+        .animate-spin-slow { animation: spin 3s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .fade-in { animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .slide-up { animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .btn-amber {
+            background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-amber:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.4);
+        }
+        
+        .btn-teal {
+            background: linear-gradient(135deg, #99f6e4 0%, #5eead4 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-teal:hover {
+            background: linear-gradient(135deg, #5eead4 0%, #2dd4bf 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(94, 234, 212, 0.4);
+        }
+        
+        .btn-blue {
+            background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-blue:hover {
+            background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(147, 197, 253, 0.4);
+        }
+        
+        .card-modern {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        
+        .card-modern:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        }
+        
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .input-modern {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+        
+        .input-modern:focus {
+            outline: none;
+            border-color: #5eead4;
+            box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.2);
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .icon-svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .icon-nav {
+            width: 22px;
+            height: 22px;
+        }
+    </style>
+</head>
+<body class="flex justify-center min-h-screen antialiased text-gray-800">
+    <div id="app" class="w-full max-w-md min-h-screen shadow-2xl flex flex-col relative overflow-hidden pb-20"></div>
+
+    <script>
+        // ===== ICONOS SVG COLORIDOS =====
+        const icons = {
+            home: `<svg class="icon-nav" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12L12 3L21 12V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V12Z" fill="#93c5fd" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12H15V22" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            users: `<svg class="icon-nav" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" fill="#99f6e4" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5"/><path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" fill="#99f6e4" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            package: `<svg class="icon-nav" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 9.4L7.5 4.21" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 16V8C21 7.46957 20.7893 6.96086 20.4142 6.58579C20.0391 6.21071 19.5304 6 19 6H5C4.46957 6 3.96086 6.21071 3.58579 6.58579C3.21071 6.96086 3 7.46957 3 8V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18H19C19.5304 18 20.0391 17.7893 20.4142 17.4142C20.7893 17.0391 21 16.5304 21 16Z" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.27 6.96L12 12.01L20.73 6.96" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22.08V12" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            chart: `<svg class="icon-nav" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="12" width="4" height="9" rx="1" fill="#99f6e4" stroke="#0d9488" stroke-width="1.5"/><rect x="10" y="6" width="4" height="15" rx="1" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/><rect x="17" y="3" width="4" height="18" rx="1" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/></svg>`,
+            settings: `<svg class="icon-nav" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/><path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7842 4.34276 14.532 4.07447 14.3543C3.80618 14.1766 3.49179 14.0813 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29577 4.55324 9.54802 4.34276 9.72569 4.07447C9.90337 3.80618 9.99872 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15Z" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            back: `<svg class="icon-nav" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 12H5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19L5 12L12 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            plus: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 12H19" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            trash: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6H21" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            edit: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            download: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10L12 15L17 10" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 15V3" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            upload: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 8L12 3L7 8" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 3V15" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            search: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><path d="M21 21L16.65 16.65" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            refresh: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4V10H7" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 15C4.15214 16.8727 5.39545 18.4824 7.05488 19.5884C8.71431 20.6944 10.6997 21.2371 12.6997 21.1319C14.6997 21.0267 16.6035 20.2798 18.1078 18.9995C19.6121 17.7192 20.6319 15.9725 21 14.05" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M23 20V14H17" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 9C19.8479 7.12732 18.6046 5.51763 16.9451 4.41162C15.2857 3.30561 13.3003 2.7629 11.3003 2.86812C9.30032 2.97334 7.39651 3.72025 5.89221 5.00054C4.38791 6.28083 3.36809 8.02749 3 9.95" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            cart: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="21" r="1" fill="#0d9488"/><circle cx="20" cy="21" r="1" fill="#0d9488"/><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            shield: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22S20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            warning: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18C1.64537 18.3024 1.55296 18.6453 1.55199 18.9945C1.55101 19.3437 1.64154 19.6871 1.81475 19.9905C1.98796 20.2939 2.23775 20.5466 2.5394 20.7239C2.84105 20.9011 3.18407 20.9967 3.53 21H20.47C20.8159 20.9967 21.1589 20.9011 21.4606 20.7239C21.7622 20.5466 22.012 20.2939 22.1852 19.9905C22.3584 19.6871 22.4489 19.3437 22.448 18.9945C22.447 18.6453 22.3546 18.3024 22.18 18L13.71 3.86C13.5317 3.56611 13.2807 3.32312 12.9811 3.15448C12.6815 2.98584 12.3435 2.89724 12 2.89724C11.6565 2.89724 11.3185 2.98584 11.0189 3.15448C10.7193 3.32312 10.4683 3.56611 10.29 3.86Z" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9V13" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H12.01" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            calendar: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="18" height="18" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><path d="M16 2V6" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 2V6" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10H21" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            arrowRight: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L19 12L12 19" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        };
+
+        // ===== FUNCIONES AUXILIARES =====
+        function safeParseFloat(val) {
+            const num = parseFloat(val);
+            return isNaN(num) ? 0 : num;
+        }
+        
+        function safeParseInt(val) {
+            const num = parseInt(val);
+            return isNaN(num) ? 0 : num;
+        }
+        
+        function formatMoney(val) {
+            const num = safeParseFloat(val);
+            return num.toFixed(2).replace('.', ',');
+        }
+
+        // ===== DATA =====
+        const INITIAL_CLIENTS = [
+            { id: '317', code: '317', name: 'Maria Silva', registeredDate: '12/06/2026' },
+            { id: '125', code: '125', name: 'Ana Costa', registeredDate: '20/05/2026' },
+            { id: '208', code: '208', name: 'Juliana Pereira', registeredDate: '18/07/2026' },
+            { id: '156', code: '156', name: 'Fernanda Lima', registeredDate: '11/08/2026' },
+            { id: '102', code: '102', name: 'Camila Santos', registeredDate: '25/08/2026' }
+        ];
+
+        const INITIAL_ORDERS = [
+            {
+                id: '#000184', clientCode: '317', clientName: 'Maria Silva',
+                status: 'Em separação', type: 'Directo', date: '26/09/2026', time: '11:30',
+                items: [
+                    { id: 'item-1', price: 29.90, qty: 1, addedAt: '26/09/2026 11:30' },
+                    { id: 'item-2', price: 35.00, qty: 1, addedAt: '26/09/2026 11:31' },
+                    { id: 'item-3', price: 18.50, qty: 1, addedAt: '26/09/2026 11:32' }
+                ]
+            },
+            {
+                id: '#000183', clientCode: '125', clientName: 'Ana Costa',
+                status: 'Pendente', type: 'Live', date: '25/09/2026', time: '19:45',
+                items: [
+                    { id: 'item-4', price: 25.00, qty: 3, addedAt: '25/09/2026 19:45' },
+                    { id: 'item-5', price: 45.00, qty: 2, addedAt: '25/09/2026 19:50' }
+                ]
+            }
+        ];
+
+        // ===== STATE =====
+        let config = JSON.parse(localStorage.getItem('obedire_config_v11')) || {
+            storeName: 'ATACADO OBEDIRE',
+            subtitle: 'Moda infantil • Pedidos • Live • Organização',
+            tagline: 'Juntos vestindo os melhores momentos! ♡',
+            primaryColor: '#5eead4',
+            headerColor: '#14b8a6',
+            accentYellow: '#fde68a',
+            logoScale: 110,
+            customLogoUrl: '',
+            coverBgUrl: ''
+        };
+
+        let clients = JSON.parse(localStorage.getItem('obedire_clients_v11')) || INITIAL_CLIENTS;
+        let orders = JSON.parse(localStorage.getItem('obedire_orders_v11')) || INITIAL_ORDERS;
+        let liveItems = JSON.parse(localStorage.getItem('obedire_live_items_v11')) || [];
+        let draftOrderItems = JSON.parse(localStorage.getItem('obedire_draft_items_v11')) || [];
+        let draftClientCode = localStorage.getItem('obedire_draft_code_v11') || '';
+        let draftClientName = localStorage.getItem('obedire_draft_name_v11') || '';
+
+        let currentScreen = 'cover';
+        let selectedOrderId = null;
+        let showFinalizeModal = false;
+        let orderToDelete = null;
+        let inputCode = '';
+        let inputName = '';
+        let inputPrice = '';
+        let inputQty = 1;
+        let matchedClient = null;
+        let newPiecePrice = '';
+        let newPieceQty = 1;
+        let showAddPieceForm = false;
+        
+        let newClientCode = '';
+        let newClientName = '';
+        let orderTab = 'Live';
+
+        // ===== SAVE =====
+        function saveAll() {
+            try { localStorage.setItem('obedire_config_v11', JSON.stringify(config)); } catch(e) {}
+            localStorage.setItem('obedire_clients_v11', JSON.stringify(clients));
+            localStorage.setItem('obedire_orders_v11', JSON.stringify(orders));
+            localStorage.setItem('obedire_live_items_v11', JSON.stringify(liveItems));
+            localStorage.setItem('obedire_draft_items_v11', JSON.stringify(draftOrderItems));
+            localStorage.setItem('obedire_draft_code_v11', draftClientCode);
+            localStorage.setItem('obedire_draft_name_v11', draftClientName);
+        }
+
+        // ===== HELPERS =====
+        function getCurrentDate() { return new Date().toLocaleDateString('pt-BR'); }
+        function getCurrentTime() { return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
+
+        function getLiveSummaryByClient() {
+            const acc = {};
+            liveItems.forEach(item => {
+                if (!acc[item.clientCode]) {
+                    acc[item.clientCode] = { code: item.clientCode, name: item.clientName, totalQty: 0, totalPrice: 0 };
+                }
+                acc[item.clientCode].totalQty += safeParseInt(item.qty);
+                acc[item.clientCode].totalPrice += safeParseFloat(item.price) * safeParseInt(item.qty);
+            });
+            return Object.values(acc);
+        }
+
+        function getTotalOrdersCount() { return orders.length; }
+        function getTotalPiecesCount() { return orders.reduce((sum, o) => sum + o.items.reduce((iSum, i) => iSum + safeParseInt(i.qty), 0), 0); }
+        function getTotalRevenue() { return orders.reduce((sum, o) => sum + o.items.reduce((iSum, i) => iSum + (safeParseFloat(i.price) * safeParseInt(i.qty)), 0), 0); }
+
+        function getOrdersByDay() {
+            const acc = {};
+            orders.forEach(o => {
+                const day = o.date;
+                if (!acc[day]) {
+                    acc[day] = { date: day, orderCount: 0, totalPieces: 0, totalRevenue: 0, liveOrders: 0, directOrders: 0, orders: [] };
+                }
+                const pieces = o.items.reduce((s, i) => s + safeParseInt(i.qty), 0);
+                const revenue = o.items.reduce((s, i) => s + (safeParseFloat(i.price) * safeParseInt(i.qty)), 0);
+                acc[day].orderCount += 1;
+                acc[day].totalPieces += pieces;
+                acc[day].totalRevenue += revenue;
+                if (o.type === 'Live') acc[day].liveOrders += 1;
+                else acc[day].directOrders += 1;
+                acc[day].orders.push(o);
+            });
+            return Object.values(acc).sort((a, b) => {
+                const [da, ma, ya] = a.date.split('/');
+                const [db, mb, yb] = b.date.split('/');
+                return new Date(`${ya}-${ma}-${da}`) - new Date(`${yb}-${mb}-${db}`);
+            });
+        }
+
+        function exportCompleteReport() {
+            const days = getOrdersByDay();
+            if (days.length === 0) { alert('Não há pedidos para exportar.'); return; }
+            
+            let csv = 'Data;Pedido;Cliente;Código;Tipo;Status;Peças;Total (R$);Hora\n';
+            let grandOrders = 0, grandPieces = 0, grandRevenue = 0;
+            
+            days.forEach(d => {
+                d.orders.forEach(o => {
+                    const pieces = o.items.reduce((s, i) => s + safeParseInt(i.qty), 0);
+                    const revenue = o.items.reduce((s, i) => s + (safeParseFloat(i.price) * safeParseInt(i.qty)), 0);
+                    const clientName = `"${o.clientName.replace(/"/g, '""')}"`;
+                    csv += `${d.date};${o.id};${clientName};${o.clientCode};${o.type};${o.status};${pieces};${revenue.toFixed(2).replace('.', ',')};${o.time || ''}\n`;
+                    grandOrders++; grandPieces += pieces; grandRevenue += revenue;
+                });
+            });
+            
+            csv += `\nTOTAL GERAL;;;${grandOrders} pedidos;${grandPieces} peças;;${grandRevenue.toFixed(2).replace('.', ',')};;`;
+            
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', `Reporte_Completo_Pedidos_${getCurrentDate().replace(/\//g, '-')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            alert(`✅ Reporte completo descargado!\n\n${grandOrders} pedidos\n${grandPieces} peças\nR$ ${grandRevenue.toFixed(2).replace('.', ',')}`);
+        }
+
+        function importResumo(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const text = event.target.result;
+                const lines = text.split('\n');
+                let imported = 0;
+                lines.forEach((line, index) => {
+                    if (index === 0) return;
+                    if (!line.trim()) return;
+                    const cols = line.split(';');
+                    if (cols.length >= 4) {
+                        const date = cols[0].trim();
+                        const orderCount = parseInt(cols[1]) || 0;
+                        if (date && orderCount > 0) imported++;
+                    }
+                });
+                alert(`Resumo importado: ${imported} dia(s) lido(s).`);
+            };
+            reader.readAsText(file);
+        }
+
+        function updateLiveCodeSearch() {
+            const codeInput = document.getElementById('liveCodeInput');
+            const nameInput = document.getElementById('liveNameInput');
+            const statusDiv = document.getElementById('liveCodeStatus');
+            if (!codeInput || !nameInput || !statusDiv) return;
+            
+            inputCode = codeInput.value;
+            const found = clients.find(c => c.code.trim().toLowerCase() === inputCode.trim().toLowerCase());
+            if (found) {
+                matchedClient = found;
+                inputName = found.name;
+                nameInput.value = found.name;
+                statusDiv.innerHTML = '<span class="text-teal-600 font-semibold">✅ Cliente identificado: ' + found.name + '</span>';
+            } else {
+                matchedClient = null;
+                if (inputCode.trim().length > 0) {
+                    statusDiv.innerHTML = '<span class="text-amber-600 font-semibold"> Cliente novo - digite o nome abaixo</span>';
+                } else {
+                    statusDiv.innerHTML = '';
+                    nameInput.value = '';
+                }
+            }
+        }
+
+        function handleAddLiveItem() {
+            const codeInput = document.getElementById('liveCodeInput');
+            const nameInput = document.getElementById('liveNameInput');
+            const priceInput = document.getElementById('livePriceInput');
+            
+            const code = codeInput ? codeInput.value.trim() : '';
+            const name = nameInput ? nameInput.value.trim() : '';
+            const price = priceInput ? safeParseFloat(priceInput.value) : 0;
+            
+            if (!code) { alert('Informe o código do cliente.'); return; }
+            if (!price || price <= 0) { alert('Informe um preço válido maior que zero.'); return; }
+            
+            const clientName = name || `Cliente ${code}`;
+            if (!clients.some(c => c.code.trim() === code)) {
+                clients.push({ id: code, code: code, name: clientName, registeredDate: getCurrentDate() });
+            }
+            
+            liveItems.unshift({
+                id: Date.now() + Math.random(),
+                clientCode: code,
+                clientName: clientName,
+                price: price,
+                qty: safeParseInt(inputQty) || 1,
+                date: getCurrentDate(),
+                time: getCurrentTime()
+            });
+            
+            inputCode = ''; inputName = ''; inputPrice = ''; inputQty = 1; matchedClient = null;
+            saveAll(); render();
+        }
+
+        function confirmFinalizeLive() {
+            if (liveItems.length === 0) { showFinalizeModal = false; render(); return; }
+            const liveDate = getCurrentDate(); const liveTime = getCurrentTime();
+            const grouped = {};
+            liveItems.forEach(item => {
+                if (!grouped[item.clientCode]) {
+                    grouped[item.clientCode] = { clientCode: item.clientCode, clientName: item.clientName, items: [] };
+                }
+                grouped[item.clientCode].items.push({
+                    id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+                    price: safeParseFloat(item.price), qty: safeParseInt(item.qty) || 1,
+                    addedAt: `${item.date || liveDate} ${item.time || liveTime}`
+                });
+            });
+            const timestamp = Date.now().toString().slice(-4);
+            const newOrders = Object.values(grouped).map((group, idx) => ({
+                id: `#LIVE-${timestamp}-${idx + 1}`, clientCode: group.clientCode, clientName: group.clientName,
+                status: 'Em separação', type: 'Live', date: liveDate, time: liveTime, items: group.items
+            }));
+            orders = [...newOrders, ...orders]; liveItems = []; showFinalizeModal = false;
+            currentScreen = 'pedidos'; saveAll(); render();
+        }
+
+        function updateOrdCodeSearch() {
+            const codeInput = document.getElementById('ordCodeInput');
+            const nameInput = document.getElementById('ordNameInput');
+            const statusDiv = document.getElementById('ordCodeStatus');
+            if (!codeInput || !nameInput || !statusDiv) return;
+            
+            draftClientCode = codeInput.value;
+            const found = clients.find(c => c.code.trim().toLowerCase() === draftClientCode.trim().toLowerCase());
+            if (found) {
+                matchedClient = found; draftClientName = found.name; nameInput.value = found.name;
+                statusDiv.innerHTML = '<span class="text-teal-600 font-semibold">✅ Cliente identificado: ' + found.name + '</span>';
+            } else {
+                matchedClient = null;
+                if (draftClientCode.trim().length > 0) {
+                    statusDiv.innerHTML = '<span class="text-amber-600 font-semibold">❓ Cliente novo - digite o nome abaixo</span>';
+                } else {
+                    statusDiv.innerHTML = '';
+                }
+            }
+            saveAll();
+        }
+
+        function addOrdItem() {
+            const priceInput = document.getElementById('ordPriceInput');
+            const price = priceInput ? safeParseFloat(priceInput.value) : 0;
+            
+            if (!price || price <= 0) { alert('Informe um preço válido maior que zero.'); return; }
+            
+            draftOrderItems.push({
+                id: Date.now(),
+                price: price,
+                qty: safeParseInt(inputQty) || 1,
+                addedAt: `${getCurrentDate()} ${getCurrentTime()}`
+            });
+            
+            inputPrice = '';
+            inputQty = 1;
+            saveAll();
+            render();
+        }
+
+        function editDraftItem(idx) {
+            const item = draftOrderItems[idx];
+            const newPriceStr = prompt("Corregir precio (use punto como decimal, ej: 49.90):", item.price.toString());
+            if (newPriceStr === null) return;
+            const newQtyStr = prompt("Corregir cantidad:", item.qty.toString());
+            if (newQtyStr === null) return;
+            
+            const parsedPrice = safeParseFloat(newPriceStr.replace(',', '.'));
+            const parsedQty = safeParseInt(newQtyStr);
+            
+            if (parsedPrice > 0 && parsedQty > 0) {
+                draftOrderItems[idx] = { ...item, price: parsedPrice, qty: parsedQty };
+                saveAll(); render();
+            } else {
+                alert("Valores inválidos. El precio debe ser mayor a 0 y la cantidad debe ser mayor a 0.");
+            }
+        }
+
+        function removeOrdItem(itemId) {
+            draftOrderItems = draftOrderItems.filter(item => item.id !== itemId);
+            saveAll(); render();
+        }
+
+        function saveOrdOrder() {
+            const codeInput = document.getElementById('ordCodeInput');
+            const nameInput = document.getElementById('ordNameInput');
+            const code = codeInput ? codeInput.value.trim() : '';
+            const name = nameInput ? nameInput.value.trim() : '';
+            
+            if (!code) { alert('Informe o código do cliente.'); return; }
+            
+            const clientName = name || (matchedClient ? matchedClient.name : `Cliente ${code}`);
+            if (!clients.some(c => c.code.trim() === code)) {
+                clients.push({ id: code, code: code, name: clientName, registeredDate: getCurrentDate() });
+            }
+            
+            const priceInput = document.getElementById('ordPriceInput');
+            const price = priceInput ? safeParseFloat(priceInput.value) : 0;
+            const qty = safeParseInt(inputQty) || 1;
+            
+            let finalItems = draftOrderItems;
+            if (draftOrderItems.length === 0 && price > 0) {
+                finalItems = [{ id: Date.now(), price: price, qty: qty, addedAt: `${getCurrentDate()} ${getCurrentTime()}` }];
+            } else if (draftOrderItems.length === 0 && price === 0) {
+                alert('Agregue al menos un item con precio válido.');
+                return;
+            }
+            
+            const newOrder = {
+                id: `#000${String(orders.length + 185).padStart(3, '0')}`,
+                clientCode: code, clientName: clientName, status: 'Em separação', type: 'Directo',
+                date: getCurrentDate(), time: getCurrentTime(),
+                items: finalItems
+            };
+            
+            orders.unshift(newOrder);
+            draftOrderItems = []; draftClientCode = ''; draftClientName = '';
+            inputCode = ''; inputName = ''; inputPrice = ''; inputQty = 1; matchedClient = null;
+            saveAll(); currentScreen = 'pedidos'; render();
+        }
+
+        function handleLogoFileUpload(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => { config.customLogoUrl = event.target.result; saveAll(); render(); };
+            reader.readAsDataURL(file);
+        }
+
+        function handleCoverBgFileUpload(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => { config.coverBgUrl = event.target.result; saveAll(); render(); };
+            reader.readAsDataURL(file);
+        }
+
+        function clearInputs() { inputCode = ''; inputName = ''; inputPrice = ''; inputQty = 1; matchedClient = null; }
+
+        function handleDeleteOrder(orderId) {
+            orders = orders.filter(o => o.id !== orderId);
+            if (selectedOrderId === orderId) { selectedOrderId = null; currentScreen = 'pedidos'; }
+            orderToDelete = null; saveAll(); render();
+        }
+
+        function handleUpdateItemQty(orderId, itemId, newQty) {
+            const qty = safeParseInt(newQty);
+            if (qty <= 0) { handleRemoveOrderItem(orderId, itemId); return; }
+            orders = orders.map(o => o.id === orderId ? { ...o, items: o.items.map(i => i.id === itemId ? { ...i, qty: qty } : i) } : o);
+            saveAll(); render();
+        }
+
+        function handleRemoveOrderItem(orderId, itemId) {
+            orders = orders.map(o => o.id === orderId ? { ...o, items: o.items.filter(i => i.id !== itemId) } : o);
+            saveAll(); render();
+        }
+
+        function editOrderItem(orderId, itemId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            const item = order.items.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const newPriceStr = prompt("Corregir precio (use punto como decimal, ej: 49.90):", item.price.toString());
+            if (newPriceStr === null) return;
+            const newQtyStr = prompt("Corregir cantidad:", item.qty.toString());
+            if (newQtyStr === null) return;
+            
+            const parsedPrice = safeParseFloat(newPriceStr.replace(',', '.'));
+            const parsedQty = safeParseInt(newQtyStr);
+            
+            if (parsedPrice > 0 && parsedQty > 0) {
+                orders = orders.map(o => {
+                    if (o.id === orderId) {
+                        return { ...o, items: o.items.map(i => i.id === itemId ? { ...i, price: parsedPrice, qty: parsedQty } : i) };
+                    }
+                    return o;
+                });
+                saveAll(); render();
+            } else {
+                alert("Valores inválidos. El precio debe ser mayor a 0 y la cantidad debe ser mayor a 0.");
+            }
+        }
+
+        function handleAddPieceToOrder(orderId) {
+            const price = safeParseFloat(newPiecePrice);
+            const qty = safeParseInt(newPieceQty) || 1;
+            
+            if (!price || price <= 0) { alert("Informe um valor válido maior que zero para a peça."); return; }
+            
+            orders = orders.map(o => o.id === orderId ? { ...o, items: [...o.items, { id: `item-${Date.now()}`, price: price, qty: qty, addedAt: `${getCurrentDate()} ${getCurrentTime()}` }] } : o);
+            newPiecePrice = ''; newPieceQty = 1; showAddPieceForm = false; saveAll(); render();
+        }
+
+        function handleUpdateOrderStatus(orderId, newStatus) {
+            orders = orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o);
+            saveAll(); render();
+        }
+
+        function handleImportClients(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const text = event.target.result; const lines = text.split('\n'); const imported = []; let errors = 0;
+                lines.forEach((line, index) => {
+                    if (index === 0) return; if (!line.trim()) return;
+                    let cols = line.split(';'); if (cols.length < 2) cols = line.split(',');
+                    if (cols.length >= 2 && cols[0].trim()) {
+                        const code = cols[0].trim(); const name = cols[1].trim().replace(/"/g, '').replace('\r', '');
+                        if (code && name) imported.push({ id: code, code: code, name: name, registeredDate: cols[2] ? cols[2].trim() : getCurrentDate() });
+                        else errors++;
+                    } else errors++;
+                });
+                if (imported.length > 0) {
+                    const filteredNew = imported.filter(imp => !clients.some(p => p.code === imp.code));
+                    clients = [...clients, ...filteredNew]; saveAll(); render();
+                    alert(`✅ Sucesso!\n\n${imported.length} cliente(s) lido(s)\n${filteredNew.length} novo(s) adicionado(s)`);
+                } else alert('❌ Formato inválido.\n\nUse: Código;Nome;Data');
+            };
+            reader.readAsText(file);
+        }
+
+        function handleExportClients() {
+            if (clients.length === 0) { alert('Não há clientes para exportar.'); return; }
+            let csv = 'Código;Nome;Data de Cadastro\n';
+            clients.forEach(c => { csv += `${c.code};"${c.name.replace(/"/g, '""')}";${c.registeredDate}\n`; });
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Clientes_Cadastrados_${getCurrentDate().replace(/\//g, '-')}.csv`);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            alert(`✅ ${clients.length} clientes exportados!`);
+        }
+
+        function addClientManual() {
+            if (!newClientCode.trim() || !newClientName.trim()) { alert('Informe o código e o nome do cliente.'); return; }
+            if (clients.some(c => c.code.trim() === newClientCode.trim())) { alert('️ Este código já está cadastrado!'); return; }
+            clients.push({ id: newClientCode.trim(), code: newClientCode.trim(), name: newClientName.trim(), registeredDate: getCurrentDate() });
+            newClientCode = ''; newClientName = ''; saveAll(); render();
+            alert(`✅ Cliente adicionado com sucesso!`);
+        }
+
+        // ===== NUEVO: EDITAR CLIENTE =====
+        function editClient(code) {
+            const client = clients.find(c => c.code === code);
+            if (!client) return;
+            
+            const newCode = prompt("Editar código del cliente:", client.code);
+            if (newCode === null) return; // Cancelado
+            
+            const trimmedCode = newCode.trim();
+            if (!trimmedCode) {
+                alert("El código no puede estar vacío.");
+                return;
+            }
+            
+            // Verificar que el nuevo código no esté en uso por otro cliente
+            const existingClient = clients.find(c => c.code === trimmedCode && c.id !== client.id);
+            if (existingClient) {
+                alert(`⚠️ Ya existe un cliente con el código "${trimmedCode}".`);
+                return;
+            }
+            
+            const newName = prompt("Editar nombre del cliente:", client.name);
+            if (newName === null) return; // Cancelado
+            
+            const trimmedName = newName.trim();
+            if (!trimmedName) {
+                alert("El nombre no puede estar vacío.");
+                return;
+            }
+            
+            // Actualizar el cliente
+            const oldCode = client.code;
+            client.code = trimmedCode;
+            client.id = trimmedCode;
+            client.name = trimmedName;
+            
+            // Actualizar pedidos que usen este código
+            orders.forEach(o => {
+                if (o.clientCode === oldCode) {
+                    o.clientCode = trimmedCode;
+                    o.clientName = trimmedName;
+                }
+            });
+            
+            // Actualizar items en live
+            liveItems.forEach(item => {
+                if (item.clientCode === oldCode) {
+                    item.clientCode = trimmedCode;
+                    item.clientName = trimmedName;
+                }
+            });
+            
+            // Actualizar borrador si está usando este cliente
+            if (draftClientCode === oldCode) {
+                draftClientCode = trimmedCode;
+                draftClientName = trimmedName;
+            }
+            
+            saveAll();
+            render();
+            alert(`✅ Cliente actualizado correctamente.\n\nCódigo: ${trimmedCode}\nNombre: ${trimmedName}`);
+        }
+
+        function deleteClient(code) {
+            const client = clients.find(c => c.code === code);
+            if (!client) return;
+            
+            const orderCount = orders.filter(o => o.clientCode === code).length;
+            const liveCount = liveItems.filter(i => i.clientCode === code).length;
+            
+            let warningMsg = `Tem certeza que deseja excluir o cliente ${code} (${client.name})?\n\nEsta ação não pode ser desfeita.`;
+            if (orderCount > 0 || liveCount > 0) {
+                warningMsg += `\n\n️ ATENÇÃO:\n- ${orderCount} pedido(s) associado(s) a este cliente\n- ${liveCount} item(s) no Live atual\n\nOs pedidos e itens do Live NÃO serão excluídos, mas ficarão sem cliente vinculado.`;
+            }
+            
+            if (confirm(warningMsg)) {
+                clients = clients.filter(c => c.code !== code);
+                saveAll();
+                render();
+                alert(`✅ Cliente ${code} excluído!`);
+            }
+        }
+
+        function clearAllTestData() {
+            if (confirm('⚠️ ATENÇÃO!\n\nIsso irá excluir TODOS os registros de teste:\n- Pedidos\n- Itens do Live\n- Rascunhos\n\nOs clientes NÃO serão excluídos.\n\nDeseja continuar?')) {
+                orders = []; liveItems = []; draftOrderItems = []; selectedOrderId = null;
+                saveAll(); render(); alert('✅ Todos os registros de teste foram excluídos!');
+            }
+        }
+
+        // ===== RENDER =====
+        function render() {
+            const app = document.getElementById('app');
+            let html = '';
+
+            if (currentScreen === 'cover') {
+                const bgStyle = config.coverBgUrl ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65)), url(${config.coverBgUrl})` : 'none';
+                html += `<div class="flex-1 flex flex-col justify-between items-center p-6 text-center relative bg-cover bg-center fade-in" style="background-image: ${bgStyle}; background-color: ${config.coverBgUrl ? 'transparent' : config.primaryColor}; min-height: 100vh;">
+                    <div class="w-full flex justify-between items-center pt-2 text-white z-10">
+                        <span class="text-xs font-semibold tracking-wider opacity-90">ATACADO OBEDIRE</span>
+                        <button onclick="currentScreen='config'; render();" class="p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-all">${icons.settings}</button>
+                    </div>
+                    <div class="my-auto flex flex-col items-center z-10 w-full px-4">
+                        <div class="mb-4 p-4 rounded-3xl bg-white/95 shadow-2xl backdrop-blur-md flex justify-center items-center">
+                            ${config.customLogoUrl ? `<img src="${config.customLogoUrl}" alt="Logo" class="object-contain" style="width:${config.logoScale}px; height:${config.logoScale}px;">` : `<div class="w-20 h-20 bg-gradient-to-br from-teal-300 to-teal-500 rounded-3xl flex items-center justify-center shadow-lg"><svg width="48" height="48" viewBox="0 0 100 60" fill="none"><path d="M50 10 L85 35 C85 35, 70 40, 50 40 C30 40, 15 35, 15 35 Z" stroke="white" stroke-width="6" fill="none"/><circle cx="50" cy="10" r="6" fill="white"/><path d="M50 40 L50 52" stroke="white" stroke-width="6"/></svg></div>`}
+                        </div>
+                        <h1 class="text-2xl font-black tracking-wider text-white uppercase drop-shadow-md">${config.storeName}</h1>
+                        <p class="text-teal-100 font-medium text-xs mt-1 drop-shadow">${config.subtitle}</p>
+                        <div class="mt-6 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 max-w-xs">
+                            <p class="italic text-gray-800 text-xs font-semibold leading-relaxed">"${config.tagline}"</p>
+                        </div>
+                    </div>
+                    <div class="w-full pb-4 z-10">
+                        <button onclick="currentScreen='home'; render();" class="w-full py-4 rounded-2xl text-gray-900 font-extrabold text-base shadow-xl active-scale flex items-center justify-center gap-2 btn-amber">
+                            ENTRAR NA APLICAÇÃO ${icons.arrowRight}
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            if (currentScreen !== 'cover') {
+                const screenTitles = { 'novo_pedido': 'Novo Pedido', 'pedido_detail': 'Detalhe do Pedido', 'live': 'Pedido no Live', 'clientes': 'Clientes', 'pedidos': 'Pedidos', 'resumo': 'Resumo', 'config': 'Personalização' };
+                html += `<header class="px-4 pt-8 pb-4 text-white shadow-lg flex items-center justify-between transition-all" style="background: linear-gradient(135deg, ${config.headerColor} 0%, ${config.primaryColor} 100%);">
+                    ${currentScreen !== 'home' ? `<button onclick="currentScreen='home'; render();" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all">${icons.back}</button>` : `<div class="w-10"></div>`}
+                    <div class="text-center flex-1 mx-2">
+                        <h2 class="font-extrabold text-base tracking-wide uppercase leading-tight">${config.storeName}</h2>
+                        ${currentScreen !== 'home' ? `<span class="text-[11px] text-teal-100 capitalize block">${screenTitles[currentScreen] || currentScreen}</span>` : ''}
+                    </div>
+                    <button onclick="currentScreen='config'; render();" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all">${icons.settings}</button>
+                </header>`;
+            }
+
+            if (currentScreen === 'home') {
+                html += `<div class="flex-1 p-4 space-y-4 overflow-y-auto fade-in scrollbar-hide">
+                    <div class="card-modern p-6 text-center flex flex-col items-center justify-center relative border border-teal-100">
+                        <div class="mb-3 p-3 rounded-2xl bg-gradient-to-br from-teal-300 to-teal-500 shadow-lg flex items-center justify-center w-16 h-16">
+                            ${config.customLogoUrl ? `<img src="${config.customLogoUrl}" alt="Logo" class="object-contain max-h-12 max-w-[48px]">` : `<svg width="36" height="36" viewBox="0 0 100 60" fill="none"><path d="M50 10 L85 35 C85 35, 70 40, 50 40 C30 40, 15 35, 15 35 Z" stroke="white" stroke-width="6" fill="none"/><circle cx="50" cy="10" r="6" fill="white"/><path d="M50 40 L50 52" stroke="white" stroke-width="6"/></svg>`}
+                        </div>
+                        <h1 class="font-black text-teal-700 text-xl tracking-wider uppercase leading-tight">${config.storeName}</h1>
+                        <p class="text-xs text-teal-500 font-semibold mt-1">${config.subtitle}</p>
+                        <p class="text-xs text-teal-600 font-semibold italic mt-2">"${config.tagline}"</p>
+                    </div>
+                    
+                    <button onclick="currentScreen='live'; render();" class="w-full p-4 rounded-2xl text-left shadow-lg flex items-center justify-between active-scale btn-amber">
+                        <div class="flex items-center gap-3">
+                            <div class="icon-wrapper bg-amber-100">
+                                <div class="animate-spin-slow">${icons.refresh}</div>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-gray-900 text-base tracking-wide uppercase">PEDIDO NO LIVE</h3>
+                                <p class="text-xs text-gray-800 font-medium">Lançamento automático com data e hora</p>
+                            </div>
+                        </div>
+                        <span class="text-gray-800">${icons.arrowRight}</span>
+                    </button>
+                    
+                    <button onclick="currentScreen='novo_pedido'; render();" class="w-full p-4 rounded-2xl text-left shadow-lg flex items-center justify-between active-scale bg-gradient-to-r from-teal-50 to-teal-100 border-l-4 border-teal-400">
+                        <div class="flex items-center gap-3">
+                            <div class="icon-wrapper bg-teal-100">
+                                ${icons.cart}
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-900 text-base tracking-wide uppercase">NOVO PEDIDO</h3>
+                                <p class="text-xs text-gray-600 font-medium">Atendimento direto ao cliente na loja</p>
+                            </div>
+                        </div>
+                        <span class="text-gray-400">${icons.arrowRight}</span>
+                    </button>
+                    
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="currentScreen='clientes'; render();" class="card-modern p-4 flex flex-col items-center justify-center active:bg-blue-50 border border-blue-100">
+                            <div class="icon-wrapper bg-gradient-to-br from-blue-100 to-blue-200 mb-2">
+                                ${icons.users}
+                            </div>
+                            <span class="font-extrabold text-xs uppercase text-gray-800">CLIENTES</span>
+                        </button>
+                        <button onclick="currentScreen='pedidos'; render();" class="card-modern p-4 flex flex-col items-center justify-center active:bg-amber-50 border border-amber-100">
+                            <div class="icon-wrapper bg-gradient-to-br from-amber-100 to-amber-200 mb-2">
+                                ${icons.package}
+                            </div>
+                            <span class="font-extrabold text-xs uppercase text-gray-800">PEDIDOS</span>
+                        </button>
+                    </div>
+                    
+                    <div class="card-modern border border-teal-100 p-4 space-y-3">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">📊 Status Operacional</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-gradient-to-br from-amber-50 to-amber-100 p-3 rounded-xl border border-amber-200">
+                                <span class="text-[11px] text-gray-600 block font-medium">Pedidos Ativos</span>
+                                <span class="text-lg font-black text-gray-800">${getTotalOrdersCount()}</span>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-xl border border-blue-200">
+                                <span class="text-[11px] text-gray-600 block font-medium">Clientes Cadastrados</span>
+                                <span class="text-lg font-black text-gray-800">${clients.length}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            if (currentScreen === 'live') {
+                html += `<div class="flex-1 p-4 space-y-4 overflow-y-auto flex flex-col fade-in scrollbar-hide">
+                    <div class="bg-gradient-to-r from-amber-50 to-amber-100 border border-amber-200 rounded-2xl p-3 flex justify-between items-center text-xs text-amber-900 shadow-sm">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-amber-600">${icons.shield}</span>
+                            <span class="font-semibold">Salvo automaticamente</span>
+                        </div>
+                        <button onclick="showFinalizeModal=true; render();" class="px-4 py-2 btn-amber text-white font-bold rounded-xl shadow active-scale-95 text-xs transition-all">
+                            FINALIZAR LIVE
+                        </button>
+                    </div>
+                    
+                    <div class="card-modern border border-teal-100 p-4 shadow-md space-y-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Código do cliente</label>
+                            <div class="relative">
+                                <input type="text" id="liveCodeInput" value="${inputCode}" placeholder="Ex: 317" oninput="inputCode=this.value; updateLiveCodeSearch();" class="input-modern w-full text-xl font-bold">
+                                <span class="absolute right-3 top-3.5">${icons.search}</span>
+                            </div>
+                            <div id="liveCodeStatus" class="mt-1 text-xs font-semibold"></div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Nome do cliente</label>
+                            <input type="text" id="liveNameInput" value="${inputName}" placeholder="Ex: Maria Silva" oninput="inputName=this.value;" class="input-modern w-full font-semibold text-gray-700">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Preço da peça (R$)</label>
+                                <input type="number" step="0.01" id="livePriceInput" value="${inputPrice}" placeholder="29,90" oninput="inputPrice=this.value;" class="input-modern w-full text-xl font-bold text-teal-800">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Quantidade</label>
+                                <div class="flex items-center border-2 border-gray-200 rounded-xl p-1 bg-gray-50">
+                                    <button onclick="let el=document.getElementById('liveQtyInput'); let v=safeParseInt(el.value)||1; v=Math.max(1,v-1); el.value=v; inputQty=v;" class="w-9 h-9 bg-white shadow rounded-lg font-bold text-lg text-gray-700 flex items-center justify-center active:bg-gray-200 transition-all">-</button>
+                                    <input type="number" id="liveQtyInput" value="${inputQty}" oninput="inputQty=safeParseInt(this.value)||1" class="flex-1 text-center font-bold text-lg bg-transparent border-none focus:outline-none w-12">
+                                    <button onclick="let el=document.getElementById('liveQtyInput'); let v=safeParseInt(el.value)||1; v=v+1; el.value=v; inputQty=v;" class="w-9 h-9 bg-white shadow rounded-lg font-bold text-lg text-gray-700 flex items-center justify-center active:bg-gray-200 transition-all">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="handleAddLiveItem();" class="w-full py-3 rounded-xl text-gray-900 font-extrabold text-base shadow active-scale flex items-center justify-center gap-2 btn-amber">
+                            ${icons.plus} ADICIONAR PEÇA
+                        </button>
+                    </div>
+                    
+                    <div class="flex-1 flex flex-col min-h-[180px]">
+                        <h3 class="font-bold text-xs text-gray-500 uppercase mb-2">📊 Resumo da Live (${getLiveSummaryByClient().length} clientes)</h3>
+                        <div class="card-modern border border-teal-100 shadow-sm flex-1 overflow-y-auto divide-y scrollbar-hide" id="liveSummaryList">
+                            ${getLiveSummaryByClient().length === 0 ? '<div class="p-8 text-center text-gray-400 text-sm">Nenhuma peça lançada nesta live.</div>' : getLiveSummaryByClient().map(item => `<div class="p-3 flex justify-between items-center text-sm hover:bg-gray-50 transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-300 to-teal-500 text-white font-bold text-xs flex items-center justify-center">${item.code}</span>
+                                    <div>
+                                        <p class="font-bold text-gray-800 leading-tight">${item.name}</p>
+                                        <p class="text-xs text-gray-500">${item.totalQty} peça(s)</p>
+                                    </div>
+                                </div>
+                                <span class="font-black text-teal-700">R$ ${formatMoney(item.totalPrice)}</span>
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            if (showFinalizeModal) {
+                const liveSummary = getLiveSummaryByClient();
+                html += `<div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in">
+                    <div class="card-modern max-w-sm w-full p-5 space-y-4 shadow-2xl slide-up">
+                        <div class="flex items-center gap-2 text-amber-600">
+                            <span class="text-2xl">${icons.warning}</span>
+                            <h3 class="font-black text-base text-gray-900">Finalizar esta Live?</h3>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed">Ao finalizar, todos os itens serão convertidos em <strong>Pedidos individuais por cliente</strong> com data e hora salvas na aba Pedidos. A tela de Live ficará <strong>completamente limpa</strong> para a próxima transmissão.</p>
+                        <div class="bg-gray-50 p-3 rounded-xl text-xs space-y-1 border">
+                            <div class="flex justify-between font-semibold"><span>👥 Clientes Atendidos:</span><span>${liveSummary.length}</span></div>
+                            <div class="flex justify-between font-semibold text-teal-700"><span> Total de Peças:</span><span>${liveItems.reduce((s, i) => s + safeParseInt(i.qty), 0)}</span></div>
+                            <div class="flex justify-between text-gray-400 text-[11px] pt-1 border-t"><span>📅 Data da Live:</span><span>${getCurrentDate()} ${getCurrentTime()}</span></div>
+                        </div>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="showFinalizeModal=false; render();" class="flex-1 py-2.5 bg-gray-100 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-200 transition-all">CANCELAR</button>
+                            <button onclick="confirmFinalizeLive();" class="flex-1 py-2.5 btn-amber text-white font-bold text-xs rounded-xl shadow">SIM, FINALIZAR</button>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            if (orderToDelete) {
+                html += `<div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in">
+                    <div class="card-modern max-w-sm w-full p-5 space-y-4 shadow-2xl slide-up">
+                        <div class="flex items-center gap-2 text-red-600">
+                            <span class="text-2xl">${icons.trash}</span>
+                            <h3 class="font-black text-base text-gray-900">Excluir Pedido?</h3>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed">Tem certeza que deseja apagar permanentemente o pedido <strong class="text-gray-900">${orderToDelete.id}</strong> (${orderToDelete.clientName})? Esta ação não pode ser desfeita.</p>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="orderToDelete=null; render();" class="flex-1 py-2.5 bg-gray-100 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-200 transition-all">CANCELAR</button>
+                            <button onclick="handleDeleteOrder('${orderToDelete.id}');" class="flex-1 py-2.5 bg-gradient-to-r from-red-400 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-xl shadow transition-all">SIM, EXCLUIR</button>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            if (currentScreen === 'novo_pedido') {
+                const totalQty = draftOrderItems.reduce((sum, item) => sum + safeParseInt(item.qty), 0);
+                const totalPrice = draftOrderItems.reduce((sum, item) => sum + (safeParseFloat(item.price) * safeParseInt(item.qty)), 0);
+                html += `<div class="flex-1 p-4 space-y-4 overflow-y-auto fade-in scrollbar-hide">
+                    <div class="bg-gradient-to-r from-amber-50 to-amber-100 border border-amber-200 rounded-2xl p-3 flex items-center gap-2 text-xs text-amber-900 shadow-sm">
+                        <span class="text-amber-600">${icons.shield}</span>
+                        <span class="font-semibold">Borrador guardado automaticamente</span>
+                        ${draftOrderItems.length > 0 ? `<span class="ml-auto font-bold">${draftOrderItems.length} item(s)</span>` : ''}
+                    </div>
+                    
+                    <div class="card-modern border border-teal-100 p-4 shadow-md space-y-3">
+                        <h3 class="font-extrabold text-sm text-teal-800 border-b pb-2 uppercase"> Novo Pedido</h3>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600 block mb-1">CÓDIGO DO CLIENTE</label>
+                            <input type="text" id="ordCodeInput" value="${draftClientCode}" placeholder="Ex: 317" oninput="draftClientCode=this.value; updateOrdCodeSearch();" class="input-modern w-full text-xl font-bold">
+                            <div id="ordCodeStatus" class="mt-1 text-xs font-semibold"></div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600 block mb-1">NOME DO CLIENTE</label>
+                            <input type="text" id="ordNameInput" value="${draftClientName}" placeholder="Nome completo do cliente" oninput="draftClientName=this.value; saveAll();" class="input-modern w-full font-semibold">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 block mb-1">PREÇO DA PEÇA (R$)</label>
+                                <input type="number" step="0.01" id="ordPriceInput" value="${inputPrice}" placeholder="0,00" oninput="inputPrice=this.value;" class="input-modern w-full text-xl font-bold text-teal-800">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 block mb-1">QUANTIDADE</label>
+                                <div class="flex items-center border-2 border-gray-200 rounded-xl p-1 bg-gray-50">
+                                    <button onclick="let el=document.getElementById('ordQtyInput'); let v=safeParseInt(el.value)||1; v=Math.max(1,v-1); el.value=v; inputQty=v;" class="w-8 h-8 bg-white shadow rounded font-bold hover:bg-gray-100 transition-all">-</button>
+                                    <input type="number" id="ordQtyInput" value="${inputQty}" oninput="inputQty=safeParseInt(this.value)||1" class="flex-1 text-center font-bold bg-transparent border-none focus:outline-none w-12">
+                                    <button onclick="let el=document.getElementById('ordQtyInput'); let v=safeParseInt(el.value)||1; v=v+1; el.value=v; inputQty=v;" class="w-8 h-8 bg-white shadow rounded font-bold hover:bg-gray-100 transition-all">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="addOrdItem();" class="w-full py-2.5 btn-teal text-teal-900 font-bold rounded-xl text-xs border border-teal-200 transition-all">➕ ADICIONAR ITEM À LISTA</button>
+                    </div>
+                    
+                    ${draftOrderItems.length > 0 ? `<div class="card-modern border shadow-sm space-y-2">
+                        <div class="flex justify-between items-center border-b pb-2 px-4 pt-4">
+                            <h4 class="font-bold text-xs text-gray-500 uppercase">📋 Itens do Pedido (${draftOrderItems.length})</h4>
+                            <span class="text-xs font-bold text-teal-700">${totalQty} peça(s)</span>
+                        </div>
+                        <div class="divide-y text-sm px-4">
+                            ${draftOrderItems.map((item, idx) => `<div class="py-2 flex justify-between items-start gap-2">
+                                <div class="flex-1 min-w-0">
+                                    <span class="font-semibold text-sm">Item #${idx + 1}</span>
+                                    <span class="text-xs text-gray-500 block break-all">${safeParseInt(item.qty)}x × R$ ${formatMoney(item.price)}</span>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <span class="font-bold text-sm">R$ ${formatMoney(safeParseFloat(item.price) * safeParseInt(item.qty))}</span>
+                                    <button onclick="editDraftItem(${idx})" class="p-1 transition-all" title="Editar">${icons.edit}</button>
+                                    <button onclick="removeOrdItem(${item.id})" class="p-1 transition-all" title="Eliminar">${icons.trash}</button>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                        <div class="border-t-2 border-teal-400 pt-3 flex justify-between items-center px-4 pb-4">
+                            <div>
+                                <span class="font-black text-gray-800">TOTAL</span>
+                                <span class="text-xs text-gray-500 block">${totalQty} peça(s)</span>
+                            </div>
+                            <span class="font-black text-teal-700 text-xl">R$ ${formatMoney(totalPrice)}</span>
+                        </div>
+                    </div>` : ''}
+                    
+                    <button onclick="saveOrdOrder();" class="w-full py-3.5 text-gray-900 font-extrabold text-base rounded-2xl shadow-lg active-scale btn-amber">
+                        💾 SALVAR E CRIAR PEDIDO
+                    </button>
+                </div>`;
+            }
+
+            if (currentScreen === 'clientes') {
+                html += `<div class="flex-1 p-4 space-y-3 overflow-y-auto fade-in scrollbar-hide">
+                    <div class="flex gap-2">
+                        <label class="flex-1 p-3 btn-teal text-teal-900 rounded-xl font-bold text-xs flex items-center justify-center gap-1 cursor-pointer shadow transition-all">
+                            ${icons.upload} Importar Excel (CSV)
+                            <input type="file" accept=".csv" onchange="handleImportClients(event)" class="hidden">
+                        </label>
+                        <button onclick="handleExportClients();" class="flex-1 p-3 btn-blue text-blue-900 rounded-xl font-bold text-xs flex items-center justify-center gap-1 shadow transition-all">
+                            ${icons.download} Exportar Excel
+                        </button>
+                    </div>
+                    
+                    <div class="card-modern border border-teal-100 p-4 shadow-sm space-y-3">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">➕ Adicionar Novo Cliente</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="newClientCodeInput" value="${newClientCode}" placeholder="Código" oninput="newClientCode=this.value;" class="input-modern font-bold text-sm">
+                            <input type="text" id="newClientNameInput" value="${newClientName}" placeholder="Nome do cliente" oninput="newClientName=this.value;" class="input-modern font-bold text-sm">
+                        </div>
+                        <button onclick="addClientManual();" class="w-full py-2.5 btn-teal text-teal-900 font-bold rounded-xl text-xs shadow active-scale-95">✅ ADICIONAR CLIENTE</button>
+                    </div>
+                    
+                    <button onclick="clearAllTestData();" class="w-full p-3 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 border border-red-200 text-red-600 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm active-scale-95 transition-all">
+                        ${icons.trash} Limpar Registros de Prueba
+                    </button>
+                    
+                    <div class="space-y-2 pt-2">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider"> Clientes Cadastrados (${clients.length})</h4>
+                        ${clients.map(c => {
+                            const clientOrders = orders.filter(o => o.clientCode === c.code).length;
+                            return `<div class="card-modern border border-teal-100 flex items-center justify-between shadow-sm p-3">
+                                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                    <div class="w-10 h-10 rounded-full text-white font-bold flex items-center justify-center text-sm flex-shrink-0 shadow-md" style="background: linear-gradient(135deg, ${config.primaryColor}, ${config.headerColor})">
+                                        ${c.code}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-bold text-gray-800 text-sm truncate">${c.name}</h4>
+                                        <p class="text-xs text-gray-400">Cadastrado em: ${c.registeredDate}${clientOrders > 0 ? ` • ${clientOrders} pedido(s)` : ''}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1 flex-shrink-0">
+                                    <button onclick="editClient('${c.code}');" class="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all" title="Editar cliente">
+                                        ${icons.edit}
+                                    </button>
+                                    <button onclick="deleteClient('${c.code}');" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all" title="Excluir cliente">
+                                        ${icons.trash}
+                                    </button>
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+            }
+
+            if (currentScreen === 'pedidos') {
+                const liveCount = orders.filter(o => o.type === 'Live').length;
+                const directCount = orders.filter(o => o.type === 'Directo').length;
+                const filteredOrders = orders.filter(o => o.type === orderTab);
+
+                html += `<div class="flex-1 p-4 space-y-4 overflow-y-auto fade-in scrollbar-hide">
+                    <div class="card-modern border border-teal-100 p-6 shadow-sm text-center flex flex-col items-center justify-center relative">
+                        <div class="mb-3 p-3 rounded-2xl bg-gradient-to-br from-teal-300 to-teal-500 shadow-lg flex items-center justify-center w-16 h-16">
+                            ${config.customLogoUrl ? `<img src="${config.customLogoUrl}" alt="Logo" class="object-contain max-h-12 max-w-[48px]">` : `<svg width="36" height="36" viewBox="0 0 100 60" fill="none"><path d="M50 10 L85 35 C85 35, 70 40, 50 40 C30 40, 15 35, 15 35 Z" stroke="white" stroke-width="6" fill="none"/><circle cx="50" cy="10" r="6" fill="white"/><path d="M50 40 L50 52" stroke="white" stroke-width="6"/></svg>`}
+                        </div>
+                        <h1 class="font-black text-teal-700 text-xl tracking-wider uppercase leading-tight">${config.storeName}</h1>
+                        <p class="text-xs text-teal-500 font-semibold mt-1">${config.subtitle}</p>
+                        <p class="text-xs text-teal-600 font-semibold italic mt-2">"${config.tagline}"</p>
+                    </div>
+                    
+                    <div class="flex gap-2 bg-gray-100 p-1 rounded-2xl shadow-inner">
+                        <button onclick="orderTab='Live'; render()" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${orderTab === 'Live' ? 'bg-gradient-to-r from-amber-300 to-amber-400 text-white shadow-md' : 'text-gray-500 hover:text-gray-700'}">🔄 Live (${liveCount})</button>
+                        <button onclick="orderTab='Directo'; render()" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${orderTab === 'Directo' ? 'bg-gradient-to-r from-teal-300 to-teal-400 text-white shadow-md' : 'text-gray-500 hover:text-gray-700'}">🛒 Directo (${directCount})</button>
+                    </div>
+
+                    <div class="space-y-3">
+                        ${filteredOrders.length === 0 ? `<div class="card-modern border border-teal-100 p-8 text-center text-gray-400 text-sm">Nenhum pedido ${orderTab} no momento.</div>` : filteredOrders.map(o => {
+                            const totalItemQty = o.items.reduce((s, i) => s + safeParseInt(i.qty), 0);
+                            const totalVal = o.items.reduce((s, i) => s + (safeParseFloat(i.price) * safeParseInt(i.qty)), 0);
+                            return `<div class="card-modern border border-teal-100 shadow-sm space-y-2 hover:shadow-md transition-all relative p-4">
+                                <div class="flex justify-between items-center border-b pb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-black text-gray-900 text-sm">${o.id}</span>
+                                        <span class="status-badge ${o.type === 'Live' ? 'bg-amber-100 text-amber-800' : 'bg-teal-100 text-teal-800'}">${o.type === 'Live' ? '🔄' : '🛒'} ${o.type}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="status-badge bg-gray-100 text-gray-700">${o.status}</span>
+                                        <button onclick="event.stopPropagation(); orderToDelete=orders.find(x=>x.id==='${o.id}'); render();" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Excluir">${icons.trash}</button>
+                                    </div>
+                                </div>
+                                <div onclick="selectedOrderId='${o.id}'; currentScreen='pedido_detail'; render();" class="flex justify-between items-center text-sm cursor-pointer pt-1 hover:bg-gray-50 rounded-lg p-2 -mx-2 transition-all">
+                                    <div>
+                                        <p class="font-bold text-gray-800">${o.clientName}</p>
+                                        <p class="text-xs text-gray-500">Cliente #${o.clientCode} • ${totalItemQty} peça(s)</p>
+                                        <p class="text-[11px] text-gray-400 flex items-center gap-1 mt-0.5">${icons.calendar} ${o.date} ${o.time ? `às ${o.time}` : ''}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="font-black text-teal-700 text-base block">R$ ${formatMoney(totalVal)}</span>
+                                        <span class="text-[11px] text-teal-600 font-bold flex items-center justify-end gap-0.5">Ver Detalhes →</span>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+            }
+
+            if (currentScreen === 'pedido_detail' && selectedOrderId) {
+                const order = orders.find(o => o.id === selectedOrderId);
+                if (order) {
+                    const totalQty = order.items.reduce((s, i) => s + safeParseInt(i.qty), 0);
+                    const totalVal = order.items.reduce((s, i) => s + (safeParseFloat(i.price) * safeParseInt(i.qty)), 0);
+                    html += `<div class="flex-1 p-4 space-y-4 overflow-y-auto fade-in scrollbar-hide">
+                        <div class="card-modern border border-teal-100 shadow-sm space-y-3 p-4">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">${order.id}</h3>
+                                    <span class="text-xs text-gray-400">Origem: ${order.type === 'Live' ? '🔄' : '🛒'} ${order.type}</span>
+                                </div>
+                                <span class="status-badge bg-amber-100 text-amber-900">${order.status}</span>
+                            </div>
+                            <div class="text-sm">
+                                <p class="font-black text-gray-900 text-base">${order.clientName}</p>
+                                <p class="text-xs text-gray-500">Código Cliente: #${order.clientCode} | Data do Pedido: ${order.date} ${order.time ? `às ${order.time}` : ''}</p>
+                            </div>
+                            <div class="pt-2">
+                                <label class="text-xs font-bold text-gray-500 block mb-1">ATUALIZAR STATUS DO PEDIDO:</label>
+                                <div class="grid grid-cols-2 gap-1.5 text-xs">
+                                    ${['Em separação', 'Separado', 'Embalado', 'Enviado'].map(st => `<button onclick="handleUpdateOrderStatus('${order.id}', '${st}');" class="p-2 rounded-lg font-bold border transition-all ${order.status === st ? 'bg-gradient-to-r from-teal-300 to-teal-400 text-white shadow-md' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}">${st}</button>`).join('')}
+                                </div>
+                            </div>
+                            <button onclick="orderToDelete=orders.find(x=>x.id==='${order.id}'); render();" class="w-full mt-2 py-2 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-600 border border-red-200 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all">
+                                ${icons.trash} EXCLUIR ESTE PEDIDO
+                            </button>
+                        </div>
+                        
+                        <div class="card-modern border border-teal-100 shadow-sm space-y-3 p-4">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h4 class="font-bold text-xs text-gray-500 uppercase">📦 Peças no Pedido (${order.items.length})</h4>
+                                <button onclick="showAddPieceForm=!showAddPieceForm; render();" class="text-xs btn-teal text-teal-900 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1">
+                                    ${icons.plus} Adicionar Peça
+                                </button>
+                            </div>
+                            ${showAddPieceForm ? `<div class="p-3 bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 rounded-xl space-y-2">
+                                <h5 class="font-bold text-xs text-teal-900">Incluir Nova Peça</h5>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" step="0.01" placeholder="Preço (R$)" value="${newPiecePrice}" oninput="newPiecePrice=this.value;" class="input-modern text-sm font-bold bg-white">
+                                    <input type="number" min="1" placeholder="Qtd" value="${newPieceQty}" oninput="newPieceQty=safeParseInt(this.value)||1;" class="input-modern text-sm font-bold bg-white">
+                                </div>
+                                <button onclick="handleAddPieceToOrder('${order.id}');" class="w-full py-2 btn-teal text-teal-900 text-xs font-bold rounded-lg">CONFIRMAR ADIÇÃO</button>
+                            </div>` : ''}
+                            <div class="divide-y">
+                                ${order.items.length === 0 ? `<p class="text-center text-xs text-gray-400 py-4">Nenhum item neste pedido.</p>` : order.items.map((item, idx) => {
+                                    const itemTotal = safeParseFloat(item.price) * safeParseInt(item.qty);
+                                    return `<div class="py-2.5 flex justify-between items-start gap-2">
+                                        <div class="flex-1 min-w-0">
+                                            <span class="font-bold text-gray-800 block">Peça #${idx + 1}</span>
+                                            <span class="text-xs text-teal-700 font-semibold">R$ ${formatMoney(item.price)} cada</span>
+                                            ${item.addedAt ? `<span class="text-[10px] text-gray-400 block"> ${item.addedAt}</span>` : ''}
+                                        </div>
+                                        <div class="flex items-center gap-2 flex-shrink-0">
+                                            <div class="flex items-center border-2 border-gray-200 rounded-lg bg-gray-50">
+                                                <button onclick="handleUpdateItemQty('${order.id}', '${item.id}', ${safeParseInt(item.qty) - 1})" class="w-7 h-7 font-bold text-gray-600 active:bg-gray-200 flex items-center justify-center hover:bg-gray-100 transition-all">-</button>
+                                                <span class="w-8 text-center font-bold text-xs">${safeParseInt(item.qty)}</span>
+                                                <button onclick="handleUpdateItemQty('${order.id}', '${item.id}', ${safeParseInt(item.qty) + 1})" class="w-7 h-7 font-bold text-gray-600 active:bg-gray-200 flex items-center justify-center hover:bg-gray-100 transition-all">+</button>
+                                            </div>
+                                            <span class="font-black text-gray-900 w-20 text-right">R$ ${formatMoney(itemTotal)}</span>
+                                            <button onclick="editOrderItem('${order.id}', '${item.id}')" class="p-1 transition-all" title="Editar">${icons.edit}</button>
+                                            <button onclick="handleRemoveOrderItem('${order.id}', '${item.id}');" class="p-1 transition-all" title="Eliminar">${icons.trash}</button>
+                                        </div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                            <div class="border-t-2 border-teal-400 pt-3 flex justify-between items-center font-black text-lg text-teal-800">
+                                <div><span>TOTAL DO CLIENTE</span><span class="text-xs text-gray-500 font-normal block">${totalQty} peça(s) no total</span></div>
+                                <span>R$ ${formatMoney(totalVal)}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            }
+
+            if (currentScreen === 'resumo') {
+                const days = getOrdersByDay();
+                const grandOrders = days.reduce((s, d) => s + d.orderCount, 0);
+                const grandPieces = days.reduce((s, d) => s + d.totalPieces, 0);
+                const grandRevenue = days.reduce((s, d) => s + d.totalRevenue, 0);
+                
+                html += `<div class="flex-1 p-4 space-y-4 overflow-y-auto fade-in scrollbar-hide">
+                    <h3 class="font-extrabold text-base text-gray-800 uppercase border-b pb-2 flex items-center gap-2">${icons.chart} Resumo Geral de Vendas</h3>
+                    <div class="bg-gradient-to-br from-teal-300 to-teal-500 text-white rounded-2xl p-5 shadow-lg space-y-2">
+                        <span class="text-xs text-teal-100 uppercase tracking-wider block">Faturamento Total</span>
+                        <h2 class="text-3xl font-black">R$ ${formatMoney(getTotalRevenue())}</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="card-modern border border-amber-100 shadow-sm p-4">
+                            <span class="text-xs text-gray-400 block mb-1">📦 Total de Pedidos</span>
+                            <span class="text-2xl font-black text-gray-800">${getTotalOrdersCount()}</span>
+                        </div>
+                        <div class="card-modern border border-blue-100 shadow-sm p-4">
+                            <span class="text-xs text-gray-400 block mb-1"> Peças Vendidas</span>
+                            <span class="text-2xl font-black text-gray-800">${getTotalPiecesCount()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-modern border border-teal-100 shadow-sm space-y-3 p-4">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">📥 Descargar Reporte Completo</h4>
+                        <button onclick="exportCompleteReport();" class="w-full p-4 btn-teal text-teal-900 rounded-xl font-bold text-sm flex items-center gap-3 shadow-lg active-scale-95 text-left transition-all">
+                            ${icons.download}
+                            <div>
+                                <div class="font-bold text-base">Descargar Reporte Completo en Excel</div>
+                                <div class="text-xs opacity-90 font-normal mt-1">Incluye todos los pedidos con detalle: fecha, cliente, tipo, piezas, total y hora.</div>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    ${days.length > 0 ? `<div class="card-modern border border-teal-100 shadow-sm p-4">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">📅 Resumo Diário (${days.length} dia${days.length > 1 ? 's' : ''})</h4>
+                        <div class="space-y-2">
+                            ${days.map(d => `<div class="p-3 bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl border border-teal-200">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-bold text-sm text-gray-800"> ${d.date}</span>
+                                    <span class="text-xs font-bold text-teal-700">${d.orderCount} pedido${d.orderCount > 1 ? 's' : ''}</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-xs">
+                                    <div class="text-center bg-white rounded-lg p-2"><span class="text-gray-500 block">👕 Peças</span><span class="font-black text-gray-800">${d.totalPieces}</span></div>
+                                    <div class="text-center bg-white rounded-lg p-2"><span class="text-gray-500 block">🔄 Live</span><span class="font-black text-amber-700">${d.liveOrders}</span></div>
+                                    <div class="text-center bg-white rounded-lg p-2"><span class="text-gray-500 block">🛒 Directo</span><span class="font-black text-teal-700">${d.directOrders}</span></div>
+                                </div>
+                                <div class="mt-2 pt-2 border-t border-teal-200 flex justify-between items-center">
+                                    <span class="text-xs font-bold text-gray-600">Total do dia:</span>
+                                    <span class="font-black text-teal-700 text-sm">R$ ${formatMoney(d.totalRevenue)}</span>
+                                </div>
+                            </div>`).join('')}
+                            <div class="p-3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-xl text-white flex justify-between items-center shadow-lg">
+                                <span class="font-bold text-sm">TOTAL GERAL</span>
+                                <div class="text-right">
+                                    <span class="font-black text-lg block">R$ ${formatMoney(grandRevenue)}</span>
+                                    <span class="text-xs opacity-80">${grandOrders} pedidos • ${grandPieces} peças</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>` : ''}
+                </div>`;
+            }
+
+            if (currentScreen === 'config') {
+                html += `<div class="flex-1 p-4 space-y-4 overflow-y-auto pb-20 fade-in scrollbar-hide">
+                    <h3 class="font-bold text-lg text-gray-800 border-b pb-2">⚙️ Personalização da Empresa</h3>
+                    <div class="space-y-4 card-modern border border-teal-100 shadow-sm p-4 text-sm">
+                        <div><label class="text-xs font-bold text-gray-600 block mb-1">NOME DA LOJA</label><input type="text" value="${config.storeName}" oninput="config.storeName=this.value; saveAll();" class="input-modern w-full font-bold"></div>
+                        <div><label class="text-xs font-bold text-gray-600 block mb-1">SUBTÍTULO DA LOJA</label><input type="text" value="${config.subtitle}" oninput="config.subtitle=this.value; saveAll();" class="input-modern w-full font-medium"></div>
+                        <div><label class="text-xs font-bold text-gray-600 block mb-1">SLOGAN DA PORTADA</label><input type="text" value="${config.tagline}" oninput="config.tagline=this.value; saveAll();" class="input-modern w-full"></div>
+                        <div class="p-3 bg-gray-50 rounded-xl border space-y-2">
+                            <label class="text-xs font-extrabold text-teal-800 block uppercase">🖼️ Logo da Loja (Upload de Arquivo Local)</label>
+                            <div class="flex items-center gap-3">
+                                ${config.customLogoUrl ? `<img src="${config.customLogoUrl}" alt="Logo" class="w-14 h-14 object-contain border-2 border-teal-200 rounded-lg bg-white p-1">` : `<div class="w-14 h-14 rounded-lg bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center text-teal-800 text-2xl">🖼️</div>`}
+                                <div class="flex-1 space-y-1">
+                                    <label class="px-3 py-2 btn-teal text-teal-900 rounded-xl font-bold text-xs flex items-center justify-center gap-1 cursor-pointer shadow">
+                                        📤 Carregar Logo Local
+                                        <input type="file" accept="image/*" onchange="handleLogoFileUpload(event)" class="hidden">
+                                    </label>
+                                    ${config.customLogoUrl ? `<button onclick="config.customLogoUrl=''; saveAll(); render();" class="w-full py-1 text-[11px] text-red-600 font-bold flex items-center justify-center gap-1 hover:bg-red-50 rounded transition-all">🗑️ Remover Logo</button>` : ''}
+                                </div>
+                            </div>
+                            <div><label class="text-[11px] font-bold text-gray-500 block mt-2">Tamanho / Escala do Logo: ${config.logoScale}px</label><input type="range" min="60" max="220" value="${config.logoScale}" oninput="config.logoScale=parseInt(this.value); saveAll(); render();" class="w-full accent-teal-500"></div>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-xl border space-y-2">
+                            <label class="text-xs font-extrabold text-teal-800 block uppercase"> Fundo da Portada (Upload de Arquivo Local)</label>
+                            <div class="flex items-center gap-3">
+                                ${config.coverBgUrl ? `<div class="w-14 h-14 rounded-lg bg-cover bg-center border-2 border-teal-200 shadow-sm" style="background-image: url(${config.coverBgUrl})"></div>` : `<div class="w-14 h-14 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-500 text-2xl">🖼️</div>`}
+                                <div class="flex-1 space-y-1">
+                                    <label class="px-3 py-2 btn-teal text-teal-900 rounded-xl font-bold text-xs flex items-center justify-center gap-1 cursor-pointer shadow">
+                                         Carregar Imagem Local
+                                        <input type="file" accept="image/*" onchange="handleCoverBgFileUpload(event)" class="hidden">
+                                    </label>
+                                    ${config.coverBgUrl ? `<button onclick="config.coverBgUrl=''; saveAll(); render();" class="w-full py-1 text-[11px] text-red-600 font-bold flex items-center justify-center gap-1 hover:bg-red-50 rounded transition-all">🗑️ Usar Cor Sólida</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div><label class="text-xs font-bold text-gray-600 block mb-1"> COR PRINCIPAL / HEADER</label><div class="flex gap-2 items-center"><input type="color" value="${config.primaryColor}" oninput="config.primaryColor=this.value; config.headerColor=this.value; saveAll(); render();" class="w-12 h-10 rounded border cursor-pointer"><input type="text" value="${config.primaryColor}" oninput="config.primaryColor=this.value; config.headerColor=this.value; saveAll(); render();" class="input-modern flex-1 font-mono text-xs"></div></div>
+                        <div><label class="text-xs font-bold text-gray-600 block mb-1">✨ COR DOS BOTÕES DE DESTAQUE</label><div class="flex gap-2 items-center"><input type="color" value="${config.accentYellow}" oninput="config.accentYellow=this.value; saveAll(); render();" class="w-12 h-10 rounded border cursor-pointer"><input type="text" value="${config.accentYellow}" oninput="config.accentYellow=this.value; saveAll(); render();" class="input-modern flex-1 font-mono text-xs"></div></div>
+                    </div>
+                    <button onclick="currentScreen='cover'; render();" class="w-full py-3 btn-teal text-teal-900 font-bold rounded-xl shadow-lg flex items-center justify-center gap-2">
+                        💾 SALVAR E VER PORTADA
+                    </button>
+                </div>`;
+            }
+
+            if (currentScreen !== 'cover') {
+                html += `<nav class="fixed bottom-0 max-w-md w-full glass-effect border-t border-teal-100 flex justify-around items-center py-3 z-10 shadow-lg">
+                    <button onclick="currentScreen='home'; render();" class="nav-item flex flex-col items-center text-xs font-bold ${currentScreen === 'home' ? 'text-teal-600' : 'text-gray-400'}">
+                        ${icons.home}
+                        <span>Início</span>
+                    </button>
+                    <button onclick="currentScreen='clientes'; render();" class="nav-item flex flex-col items-center text-xs font-bold ${currentScreen === 'clientes' ? 'text-teal-600' : 'text-gray-400'}">
+                        ${icons.users}
+                        <span>Clientes</span>
+                    </button>
+                    <button onclick="currentScreen='pedidos'; render();" class="nav-item flex flex-col items-center text-xs font-bold ${['pedidos', 'pedido_detail'].includes(currentScreen) ? 'text-teal-600' : 'text-gray-400'}">
+                        ${icons.package}
+                        <span>Pedidos</span>
+                    </button>
+                    <button onclick="currentScreen='resumo'; render();" class="nav-item flex flex-col items-center text-xs font-bold ${currentScreen === 'resumo' ? 'text-teal-600' : 'text-gray-400'}">
+                        ${icons.chart}
+                        <span>Resumo</span>
+                    </button>
+                </nav>`;
+            }
+
+            app.innerHTML = html;
+        }
+
+        render();
+    </script>
+</body>
+</html>
